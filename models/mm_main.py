@@ -1,4 +1,4 @@
-# Example: mm_main.py --model MM-GRID-CONCAT
+# Example: mm_main.py --model MM-ResNet-CONCAT
 import os
 import pandas as pd
 import numpy as np
@@ -42,7 +42,7 @@ models_dict = {
 print("Initializing...")
 # ARGS
 parser = argparse.ArgumentParser()
-parser.add_argument('--data_dir', default="../../../data/",
+parser.add_argument('--data_dir', default="../../data/",
                     help='local data directory')
 parser.add_argument('--res_dir', default='./res/',
                     help='Directory for results')
@@ -51,7 +51,7 @@ parser.add_argument('--mode', default='TRAINING',
 parser.add_argument('--model', default="MM-Resnet-CONCAT",
                     help='model to run, see mmodels')
 parser.add_argument('--dataset', default="AvgAll",
-                    help='AvgAll, SampleWImg)
+                    help='AvgAll, SampleWImg')
 parser.add_argument('--testing', default=0,
                     help='(1 yes, 0 no) to use a sample size 100')
 parser.add_argument('--seed', default=30,
