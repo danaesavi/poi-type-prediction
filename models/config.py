@@ -10,6 +10,7 @@ MAX_SEQ = 50
 TEXTMODEL = "bert-base-uncased"
 # Training
 BATCH_SIZE = 8
+# dropout,lr,epochs
 hparams = {
     "MM-Resnet-CONCAT": {"AvgAll": (0.25, 1e-5, 2), "SampleWImg": (0.25, 1e-5, 3)},
     "MM-Resnet-XATT": {"AvgAll": (0.15, 1e-5, 3), "SampleWImg": (0.05, 1e-5, 12)},
