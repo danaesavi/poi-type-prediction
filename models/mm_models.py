@@ -27,7 +27,6 @@ def build_ConcatClf(bert, conv_base, top_dropout_rate_mm):
     img_dense = Dense(HFixed, name="ImgDense")(img)
     # concatenate layers
     H_fused = tf.keras.layers.Concatenate()([txt, img_dense])
-    # H_dense = Dense(NumHD, activation = "relu", name = "HDense")(H_fused)
     x = Dropout(top_dropout_rate_mm, name="top_dropout")(H_fused)
     output = Dense(NUM_LABELS, activation="softmax", name="pred")(x)
     # Build and compile model
@@ -36,7 +35,7 @@ def build_ConcatClf(bert, conv_base, top_dropout_rate_mm):
 
 def build_AttentionClf(bert, conv_base, top_dropout_rate_mm):
     MODEL = "MM-GRID-Attention"
-    # text inputs# INPUT
+    # text inputs
     in_id = tf.keras.Input(shape=(MAX_SEQ,), dtype="int32", name="input_ids")
     in_mask = tf.keras.Input(shape=(MAX_SEQ,), dtype="int32", name="attention_mask")
     in_segment = tf.keras.Input(shape=(MAX_SEQ,), dtype="int32", name="token_type_ids")
@@ -69,9 +68,7 @@ def build_AttentionClf(bert, conv_base, top_dropout_rate_mm):
 def build_GLUClf(bert, conv_base, top_dropout_rate_mm):
     MODEL = "MM-GRID-GLU"
     fixed = 200
-    # ViLBERT (Co-Attentional Layer)
-    # https://arxiv.org/pdf/1908.02265.pdf
-    # text inputs# INPUT
+    # text inputs
     in_id = tf.keras.Input(shape=(MAX_SEQ,), dtype="int32", name="input_ids")
     in_mask = tf.keras.Input(shape=(MAX_SEQ,), dtype="int32", name="attention_mask")
     in_segment = tf.keras.Input(shape=(MAX_SEQ,), dtype="int32", name="token_type_ids")

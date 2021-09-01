@@ -191,7 +191,7 @@ class HyperModelXAtt(HyperModel):
         MODEL = "MM-{}-ATT".format(self.grid_name)
         bert = build_txtEncoder()
         conv_base = build_imgEncoder(self.grid_name)
-        # text inputs# INPUT
+        # text inputs
         in_id = tf.keras.Input(shape=(MAX_SEQ,), dtype="int32", name="input_ids")
         in_mask = tf.keras.Input(shape=(MAX_SEQ,), dtype="int32", name="attention_mask")
         in_segment = tf.keras.Input(shape=(MAX_SEQ,), dtype="int32", name="token_type_ids")
