@@ -27,16 +27,11 @@ Examples: model_name <- --model option
 - CONCAT-BERT+Xception <- MM-Xception-CONCAT
 - Attention-BERT+Xception <- MM-Xception-ATTM
 - MM-Gate <- MM-Xception-GLU
-- MM-XAtt <- MM-Xception-XATT
-- MM-Gated-XAtt <- MM-Xception-GLUATT
 """
 models_dict = {
     "MM-GRID-CONCAT": {"train": build_ConcatClf, "hp": HyperModelConcat},
     "MM-GRID-ATTM": {"train": build_AttentionClf, "hp": HyperModelAttM},
-    "MM-GRID-GLU": {"train": build_GLUClf, "hp": HyperModelGLU},
-    "MM-GRID-XATT": {"train": build_XAttClf, "hp": HyperModelXAtt},
-    "MM-GRID-GLUATT": {"train": build_GLUATTClf, "hp": HyperModelGLUATT},
-
+    "MM-GRID-GLU": {"train": build_GLUClf, "hp": HyperModelGLU}
 }
 
 print("Initializing...")

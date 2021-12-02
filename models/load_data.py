@@ -73,11 +73,7 @@ class DataLoader():
                 split_ids.append(int(line.strip()))
             self.img_index[split] = {id_: idx for idx, id_ in enumerate(split_ids)}
             if self.TESTING == 1:
-                if split == "test":
-                    split_ids = [792506233748021248, 901583547898540033, 823946411196563456, 925860602496634881,
-                                 832324417334054912, 935778076562034688, 851832319371509760, 961343897375997954]
-                else:
-                    split_ids = random.sample(split_ids, 10)
+                split_ids = random.sample(split_ids, 10)
 
             # GRID-LEVEL
             if self.TESTING == 1:
