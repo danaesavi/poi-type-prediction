@@ -56,9 +56,12 @@ def build_AttentionClf(bert, conv_base, top_dropout_rate_mm):
     fixed = 200
     img_dense = Dense(fixed, name="ImgDense", activation=tf.nn.tanh)(img)
     txt_dense = Dense(fixed, name="TxtDense", activation=tf.nn.tanh)(txt)
-    H_txt = tf.keras.layers.Attention()([txt_dense, txt_dense])  # , return_attention_scores=True)
-    H_img = tf.keras.layers.Attention()([img_dense, img_dense])
-    H_fused = tf.keras.layers.Add()([H_txt, H_img])
+    s = tf.stack([txt_dense, img_dense], axis=1)
+    # Attention scores
+    s_a = tf.keras.layers.Concatenate(axis=-1)([txt, img])
+    s_a = Dense(fixed, activation="relu", name="Fa")(s_a)
+    alpha = Dense(2, activation="softmax", name="alpha")(s_a)
+    H_fused = tf.keras.layers.Dot(axes=1, name="fused")([alpha, s])
     x = Dropout(top_dropout_rate_mm, name="top_dropout")(H_fused)
     output = Dense(NUM_LABELS, activation="softmax", name="pred")(x)
     # Build and compile model
