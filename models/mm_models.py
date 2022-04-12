@@ -3,6 +3,12 @@ from keras.layers import GlobalAveragePooling2D, Dropout, Dense, Flatten, Layer
 from keras import Model
 from config import *
 
+class StackLayer(tf.keras.layers.Layer):
+    def __init__(self):
+        super(StackLayer, self).__init__()
+
+    def call(self, txt_dense, img_dense):
+        return tf.stack([txt_dense, img_dense], axis=1)
 
 def build_ConcatClf(bert, conv_base, top_dropout_rate_mm):
     MODEL = "MM-GRID-CONCAT"
@@ -56,12 +62,15 @@ def build_AttentionClf(bert, conv_base, top_dropout_rate_mm):
     fixed = 200
     img_dense = Dense(fixed, name="ImgDense", activation=tf.nn.tanh)(img)
     txt_dense = Dense(fixed, name="TxtDense", activation=tf.nn.tanh)(txt)
-    s = tf.stack([txt_dense, img_dense], axis=1)
+    
+    I = StackLayer()(txt_dense, img_dense)  # 2Xfixed
     # Attention scores
-    s_a = tf.keras.layers.Concatenate(axis=-1)([txt, img])
-    s_a = Dense(fixed, activation="relu", name="Fa")(s_a)
-    alpha = Dense(2, activation="softmax", name="alpha")(s_a)
-    H_fused = tf.keras.layers.Dot(axes=1, name="fused")([alpha, s])
+    E = Dense(1, name="Scores-Att", activation=tf.nn.tanh)(I)  # 2X1
+    a = tf.keras.layers.Softmax(name="Softmax_Att")(E)
+    H_fused = tf.keras.layers.Dot(axes=1, name="Fused")([I, a])  # fixedX1
+    H_fused = tf.keras.layers.Flatten()(H_fused)
+    H_fused = tf.keras.layers.LayerNormalization()(H_fused)
+    # Prediction
     x = Dropout(top_dropout_rate_mm, name="top_dropout")(H_fused)
     output = Dense(NUM_LABELS, activation="softmax", name="pred")(x)
     # Build and compile model
